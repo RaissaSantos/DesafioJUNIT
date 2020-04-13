@@ -1,0 +1,136 @@
+NAC01- 1° Semestre 									                                                    Raissa Santos da Cruz	RM83765
+
+--TIVE QUE CRIAR A CLASSE  RESPOSTA:
+
+public class Resposta {
+	
+	private static Resposta DELACAO;
+
+	public static void executaResposta(String respostaPrisioneiroA, String respostaPrisioneiroB) {
+	
+		
+	}
+
+}
+
+Mas continuou dando erro no método DELACAO(Resposta.DELACAO() ) porque o mesmo não tinha sido criado na classe “Resposta.java”. Então eu criei um atributo e um método estático porque o mesmo está sendo acessado por 2 classe simultaneamente.
+
+public class Resposta {
+	
+	private static Resposta DELACAO;
+
+	public static void executaResposta(String respostaPrisioneiroA, String respostaPrisioneiroB) {
+	}
+
+	public static Resposta DELACAO() {
+		return DELACAO;
+	}
+
+}
+
+//Criei a classe Teste(JUNIT)
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+public class JulgamentoPrisioneiroTest {
+
+	@Test
+	public void verificaInocencia() {
+	int resposta1 = 13;
+	int resposta2 = 12;
+	JulgamentoPrisioneiro jp = new JulgamentoPrisioneiro();
+	int resultadoEsperado = 13;
+	int resultadoReal = jp.verificaI(resposta1, resposta2);
+	assertEquals(resultadoEsperado, resultadoReal);
+			
+	
+	}
+	
+	@Test
+	public void verificaPenaM() {
+	int resposta1 = 15;
+	int resposta2 = 13;
+	JulgamentoPrisioneiro jp = new JulgamentoPrisioneiro();
+	int resultadoEsperado = 15;
+	int resultadoReal = jp.verificaCondenacaoM(resposta1, resposta2);
+	assertEquals(resultadoEsperado, resultadoReal);
+	
+	}
+	
+	
+	@Test
+	public void verificaPenaI() {
+	int resposta1 = 15;
+	int resposta2 = 13;
+	JulgamentoPrisioneiro jp = new JulgamentoPrisioneiro();
+	int resultadoEsperado = 10;
+	int resultadoReal = jp.verificaCondenacaoI(resposta1, resposta2);
+	assertEquals(resultadoEsperado, resultadoReal);
+	
+	}
+	
+	
+	@Test
+	public void verificaPenaC() {
+	int resposta1 = 10;
+	int resposta2 = 13;
+	JulgamentoPrisioneiro jp = new JulgamentoPrisioneiro();
+	int resultadoEsperado = 11;
+	int resultadoReal = jp.verificaCondenacaoC(resposta1, resposta2);
+	assertEquals(resultadoEsperado, resultadoReal);
+	
+	}
+
+}
+
+//Dava erro no método então eu tive que colocar esses mesmos métodos na classe “JulgamentoPrisioneiro.java” E ficou assim:
+
+
+public class JulgamentoPrisioneiro {
+	private int PENA_INOCENCIA = 13;
+	   private int PENA_CONDENACAO_MUTUA = 15;
+	   private int PENA_CONDENACAO_INDIVIDUAL = 10;
+	   private int PENA_CONDENACAO_CUMPLICES = 11;
+	  
+
+	   public int calculaPena(Resposta respostaPrisioneiroA, Resposta respostaPrisioneiroB) {
+	      if (respostaPrisioneiroA == Resposta.DELACAO()) {
+	          if (respostaPrisioneiroB == Resposta.DELACAO()) {
+	            return PENA_CONDENACAO_MUTUA;
+	          } else {
+	                 return PENA_INOCENCIA;
+	                 }
+	       } else {
+	                if (respostaPrisioneiroB == Resposta.DELACAO()) {
+	                    return PENA_CONDENACAO_INDIVIDUAL;
+	                } else {
+	                         return PENA_CONDENACAO_CUMPLICES;
+	                        }
+	       }
+	   
+	
+	}
+
+
+	public int verificaCondenacaoM(int resposta1, int resposta2) {
+		return PENA_CONDENACAO_MUTUA;
+	}
+
+
+	public int verificaCondenacaoI(int resposta1, int resposta2) {
+		return PENA_CONDENACAO_INDIVIDUAL;
+	}
+
+
+	public int verificaCondenacaoC(int resposta1, int resposta2) {
+		return PENA_CONDENACAO_CUMPLICES;
+	}
+
+
+	public int verificaI(int resposta1, int resposta2) {
+		return PENA_INOCENCIA;
+	}	
+	}
+
+
